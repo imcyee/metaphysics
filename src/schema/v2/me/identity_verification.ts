@@ -64,3 +64,18 @@ export const IdentityVerification: GraphQLFieldConfig<void, ResolverContext> = {
     return identityVerificationLoader(id)
   },
 }
+
+export const PendingIdentityVerification: GraphQLFieldConfig<
+  any,
+  ResolverContext
+> = {
+  type: IdentityVerificationType,
+  description:
+    "The user's most current pending identity verification, if it exists",
+  resolve: (user, _args, { identityVerificationLoader }) => {
+    const { pending_identity_verification_id } = user
+    if (!(identityVerificationLoader && pending_identity_verification_id))
+      return null
+    return identityVerificationLoader(user.pending_identity_verification_id)
+  },
+}
