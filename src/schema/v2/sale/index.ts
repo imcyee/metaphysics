@@ -61,7 +61,6 @@ const BidIncrement = new GraphQLObjectType<any, ResolverContext>({
 const BuyersPremium = new GraphQLObjectType<any, ResolverContext>({
   name: "BuyersPremium",
   fields: {
-    ...SlugAndInternalIDFields,
     amount: amount(({ cents }) => cents),
     cents: {
       type: GraphQLInt,
@@ -152,7 +151,7 @@ export const SaleType = new GraphQLObjectType<any, ResolverContext>({
 
           return map(sale.buyers_premium.schedule, (item: any) => ({
             cents: item.min_amount_cents,
-            symbol: sale.currency,
+            symbol: sale.symbol,
             percent: item.percent,
           }))
         },
