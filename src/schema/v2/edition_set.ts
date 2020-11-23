@@ -32,12 +32,16 @@ const EditionSetAvailabilities = [
   "permanent collection",
 ]
 
-const EditionSetType = new GraphQLObjectType<any, ResolverContext>({
+export const EditionSetType = new GraphQLObjectType<any, ResolverContext>({
   name: "EditionSet",
   interfaces: [Sellable],
   fields: {
     ...InternalIDFields,
     dimensions: Dimensions,
+    displayPriceRange: {
+      type: GraphQLBoolean,
+      resolve: ({ display_price_range }) => display_price_range,
+    },
     editionOf: {
       type: GraphQLString,
       resolve: ({ editions }) => editions,
@@ -59,10 +63,18 @@ const EditionSetType = new GraphQLObjectType<any, ResolverContext>({
       resolve: ({ sold }) => sold,
     },
     listPrice,
+    price: {
+      type: GraphQLString,
+    },
     sizeScore: {
       description: "score assigned to an artwork based on its dimensions",
       type: GraphQLFloat,
       resolve: ({ size_score }) => size_score,
+    },
+    sizeBucket: {
+      description: "size bucket assigned to an artwork based on its dimensions",
+      type: GraphQLString,
+      resolve: ({ size_bucket }) => size_bucket,
     },
     saleMessage: {
       type: GraphQLString,
