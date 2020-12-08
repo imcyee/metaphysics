@@ -66,11 +66,14 @@ describe("when handling resolver delegation", () => {
     expect(mergeInfo.delegateToSchema).toHaveBeenCalledWith({
       args: { id: "ARTWORK-ID" },
       fieldName: "artwork",
-      ...restOfResolveArgs,
+      operation: "query",
+      schema: expect.anything(),
+      context: expect.anything(),
+      info: expect.anything(),
     })
   })
 
-  it("calls a user or partner when looking up party details ", async () => {
+  it("calls a user or partner when looking up party details", async () => {
     const { resolvers } = await getExchangeStitchedSchema()
     const { buyerDetails } = resolvers.CommerceBuyOrder
     const info = { mergeInfo: { delegateToSchema: jest.fn() } }
@@ -118,7 +121,10 @@ it("delegates to the local schema for an LineItem's artwork", async () => {
   expect(mergeInfo.delegateToSchema).toHaveBeenCalledWith({
     args: { id: "ARTWORK-ID" },
     fieldName: "artwork",
-    ...restOfResolveArgs,
+    operation: "query",
+    schema: expect.anything(),
+    context: expect.anything(),
+    info: expect.anything(),
   })
 })
 
