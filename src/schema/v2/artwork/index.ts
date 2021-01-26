@@ -48,7 +48,7 @@ import ArtworkMedium from "schema/v2/artwork/artworkMedium"
 // Mapping of category ids to MediumType values
 import artworkMediums from "lib/artworkMediums"
 import { LotStandingType } from "../me/lot_standing"
-import { amount, symbolFromCurrencyCode } from "schema/v2/fields/money"
+import { amount, Money, symbolFromCurrencyCode } from "schema/v2/fields/money"
 import { capitalizeFirstCharacter } from "lib/helpers"
 import { ResolverContext } from "types/graphql"
 import { listPrice } from "schema/v2/fields/listPrice"
@@ -729,6 +729,23 @@ export const ArtworkType = new GraphQLObjectType<any, ResolverContext>({
             artwork.shipping_origin &&
             artwork.shipping_origin[artwork.shipping_origin.length - 1]
           )
+        },
+      },
+      pricePaid: {
+        type: Money,
+        description:
+          "The price paid for the artwork in a user's 'my collection'",
+        resolve: (artwork) => {
+          const { price_paid_cents } = artwork
+          const price_paid_currency = artwork.price_paid_currency || "USD"
+          return {
+            cents: price_paid_cents,
+            currency: price_paid_currency,
+            display: amount(() => price_paid_cents).resolve(artwork, {
+              precision: 0,
+              symbol: symbolFromCurrencyCode(price_paid_currency),
+            }),
+          }
         },
       },
       provenance: markdown(({ provenance }) =>
